@@ -1,0 +1,48 @@
+{
+  "name": "viettel-vinvoice-sdk",
+  "version": "1.0.0",
+  "description": "TypeScript SDK for Viettel VinInvoice e-invoice API",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "engines": {
+    "node": ">=18.18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "jest",
+    "test:int": "VINVOICE_LIVE=1 jest test/integration",
+    "lint": "eslint src test",
+    "format": "prettier --write .",
+    "openapi": "tsx scripts/generate-openapi.ts",
+    "prepublishOnly": "npm run lint && npm test && npm run build"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "qs": "^6.13.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@asteasolutions/zod-to-openapi": "^6.4.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.10.2",
+    "@types/qs": "^6.9.17",
+    "@typescript-eslint/eslint-plugin": "^8.x",
+    "@typescript-eslint/parser": "^8.x",
+    "axios-mock-adapter": "^2.1.0",
+    "eslint": "^9.x",
+    "jest": "^29.7.0",
+    "prettier": "^3.4.2",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.2",
+    "yaml": "^2.6.1"
+  }
+}

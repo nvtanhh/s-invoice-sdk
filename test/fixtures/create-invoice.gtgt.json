@@ -1,0 +1,33 @@
+{
+  "generalInvoiceInfo": {
+    "invoiceType": "1",
+    "templateCode": "1/0230",
+    "invoiceSeries": "K25TII",
+    "currencyCode": "VND",
+    "adjustmentType": "1"
+  },
+  "buyerInfo": {
+    "buyerName": "Test Buyer",
+    "buyerLegalName": "Test Company Ltd",
+    "buyerTaxCode": "0123456789"
+  },
+  "itemInfo": [
+    {
+      "lineNumber": 1,
+      "itemName": "Test Service",
+      "unitName": "service",
+      "unitPrice": 1000000,
+      "quantity": 1,
+      "itemTotalAmountWithoutTax": 1000000,
+      "taxPercentage": 10,
+      "taxAmount": 100000
+    }
+  ],
+  "summarizeInfo": {
+    "totalAmountWithoutTax": 1000000,
+    "totalAmountWithTax": 1100000
+  },
+  "payments": [
+    { "paymentMethodName": "TM/CK" }
+  ]
+}

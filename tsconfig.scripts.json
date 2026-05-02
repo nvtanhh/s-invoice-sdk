@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "noEmit": true
+  },
+  "ts-node": {
+    "cjs": true
+  },
+  "include": ["scripts/**/*", "src/**/*"]
+}

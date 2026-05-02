@@ -1,0 +1,723 @@
+openapi: 3.1.0
+info:
+  title: Viettel VinInvoice SDK API
+  version: 1.0.0
+  description: TypeScript SDK for Viettel VinInvoice e-invoice API. Stable
+    endpoints are verified against Java sample code; Experimental endpoints are
+    sourced from DTO shapes and require sandbox confirmation.
+servers:
+  - url: https://vinvoice.viettel.vn/api
+    description: Production
+  - url: https://api-vinvoice.viettel.vn
+    description: Production (alt)
+components:
+  schemas:
+    BuyerInfo:
+      type: object
+      properties:
+        buyerName:
+          type: string
+          maxLength: 400
+        buyerLegalName:
+          type: string
+          maxLength: 400
+        buyerTaxCode:
+          type: string
+          pattern: ^[0-9-]{10,14}$
+        buyerAddressLine:
+          type: string
+          maxLength: 400
+        buyerEmail:
+          type: string
+          format: email
+        buyerPhoneNumber:
+          type: string
+          maxLength: 50
+        buyerBankAccount:
+          type: string
+          maxLength: 50
+        buyerBankName:
+          type: string
+          maxLength: 255
+        buyerCode:
+          type: string
+          maxLength: 50
+        buyerIdNo:
+          type: string
+          maxLength: 50
+        buyerIdType:
+          type: integer
+        buyerBirthDay:
+          type: string
+        buyerNotGetInvoice:
+          type: integer
+          minimum: 0
+          maximum: 1
+    SellerInfo:
+      type: object
+      properties:
+        sellerLegalName:
+          type: string
+          maxLength: 400
+        sellerTaxCode:
+          type: string
+        sellerAddressLine:
+          type: string
+          maxLength: 400
+        sellerPhoneNumber:
+          type: string
+          maxLength: 50
+        sellerEmail:
+          type: string
+          format: email
+        sellerBankAccount:
+          type: string
+          maxLength: 50
+        sellerBankName:
+          type: string
+          maxLength: 255
+        sellerWebsite:
+          type: string
+          maxLength: 255
+    ItemInfo:
+      type: object
+      properties:
+        lineNumber:
+          type: integer
+          exclusiveMinimum: 0
+        itemCode:
+          type: string
+          maxLength: 50
+        itemName:
+          type: string
+          minLength: 1
+          maxLength: 500
+        unitCode:
+          type: string
+          maxLength: 20
+        unitName:
+          type: string
+          maxLength: 50
+        unitPrice:
+          type: number
+        quantity:
+          type: number
+        itemTotalAmountWithoutTax:
+          type: number
+        taxPercentage:
+          type: number
+        taxAmount:
+          type: number
+        itemTotalAmountWithTax:
+          type: number
+        itemTotalAmountAfterDiscount:
+          type: number
+        discount:
+          type: number
+        discount2:
+          type: number
+        itemDiscount:
+          type: number
+        selection:
+          type: integer
+        isIncreaseItem:
+          type: string
+          enum:
+            - "0"
+            - "1"
+        itemNote:
+          type: string
+          maxLength: 500
+        batchNo:
+          type: string
+          maxLength: 50
+        expDate:
+          type: string
+      required:
+        - lineNumber
+        - itemName
+        - unitPrice
+        - quantity
+        - itemTotalAmountWithoutTax
+        - taxPercentage
+        - taxAmount
+    TaxBreakDownsInfo:
+      type: object
+      properties:
+        taxPercentage:
+          type: number
+        taxableAmount:
+          type: number
+        taxAmount:
+          type: number
+      required:
+        - taxPercentage
+        - taxableAmount
+        - taxAmount
+    SummarizeInfo:
+      type: object
+      properties:
+        sumOfTotalLineAmountWithoutTax:
+          type: number
+        totalAmountWithoutTax:
+          type: number
+        totalTaxAmount:
+          type: number
+        totalAmountWithTax:
+          type: number
+        totalAmountAfterDiscount:
+          type: number
+        totalAmountWithTaxFrn:
+          type: number
+        discountAmount:
+          type: number
+        taxPercentage:
+          type: number
+        totalAmountWithTaxInWords:
+          type: string
+      required:
+        - totalAmountWithoutTax
+        - totalAmountWithTax
+    MetaDataInfo:
+      type: object
+      properties:
+        keyTag:
+          type: string
+        valueType:
+          type: string
+          enum:
+            - text
+            - number
+            - date
+        keyLabel:
+          type: string
+        stringValue:
+          type: string
+        numberValue:
+          type: number
+        dateValue:
+          type: number
+      required:
+        - keyTag
+        - valueType
+    MeterReadingInfo:
+      type: object
+      properties:
+        periodFrom:
+          type: string
+        periodTo:
+          type: string
+        previousReading:
+          type: number
+        currentReading:
+          type: number
+        utilizationTime:
+          type: string
+        cumulativeQuantity:
+          type: number
+        multiplier:
+          type: number
+        powerFactor:
+          type: number
+        reactivePower:
+          type: number
+    FuelReadingInfo:
+      type: object
+      properties:
+        periodFrom:
+          type: string
+        periodTo:
+          type: string
+        previousReading:
+          type: number
+        currentReading:
+          type: number
+        quantity:
+          type: number
+        unitName:
+          type: string
+    QrCodeInfo:
+      type: object
+      properties:
+        qrCode:
+          type: string
+    PaymentInfo:
+      type: object
+      properties:
+        paymentMethodName:
+          type: string
+        paymentTime:
+          type: number
+        payee:
+          type: string
+        amount:
+          type: number
+      required:
+        - paymentMethodName
+    GeneralInvoiceInfo:
+      type: object
+      properties:
+        invoiceType:
+          type: string
+          enum:
+            - "1"
+            - "2"
+            - "6"
+        templateCode:
+          type: string
+          minLength: 1
+        invoiceSeries:
+          type: string
+          minLength: 1
+        currencyCode:
+          type: string
+          minLength: 1
+        exchangeRate:
+          type: number
+        adjustmentType:
+          type: string
+          enum:
+            - "1"
+            - "3"
+            - "5"
+        paymentStatus:
+          type: boolean
+        paymentMethodName:
+          type: string
+        cusGetInvoiceRight:
+          type: boolean
+        invoiceIssuedDate:
+          type: number
+        transactionUuid:
+          type: string
+          format: uuid
+        originalInvoiceId:
+          type: string
+        originalInvoiceIssueDate:
+          type: number
+        originalTemplateCode:
+          type: string
+        additionalReferenceDesc:
+          type: string
+        additionalReferenceDate:
+          type: number
+        adjustedNote:
+          type: string
+        adjustmentInvoiceType:
+          type: string
+          enum:
+            - "1"
+            - "2"
+        invoiceNote:
+          type: string
+        contractNumber:
+          type: string
+        contractDate:
+          type: number
+        reservationCode:
+          type: string
+        buyerNotGetInvoice:
+          type: integer
+        buyerCode:
+          type: string
+      required:
+        - invoiceType
+        - templateCode
+        - invoiceSeries
+        - currencyCode
+        - adjustmentType
+    CreateInvoiceWSDTO:
+      type: object
+      properties:
+        generalInvoiceInfo:
+          $ref: "#/components/schemas/GeneralInvoiceInfo"
+        buyerInfo:
+          $ref: "#/components/schemas/BuyerInfo"
+        sellerInfo:
+          $ref: "#/components/schemas/SellerInfo"
+        itemInfo:
+          type: array
+          items:
+            $ref: "#/components/schemas/ItemInfo"
+        taxBreakdowns:
+          type: array
+          items:
+            $ref: "#/components/schemas/TaxBreakDownsInfo"
+        summarizeInfo:
+          $ref: "#/components/schemas/SummarizeInfo"
+        payments:
+          type: array
+          items:
+            $ref: "#/components/schemas/PaymentInfo"
+        metadata:
+          type: array
+          items:
+            $ref: "#/components/schemas/MetaDataInfo"
+        meterReading:
+          type: array
+          items:
+            $ref: "#/components/schemas/MeterReadingInfo"
+        fuelReading:
+          type: array
+          items:
+            $ref: "#/components/schemas/FuelReadingInfo"
+        qrCodeInfo:
+          $ref: "#/components/schemas/QrCodeInfo"
+      required:
+        - generalInvoiceInfo
+    CancelTransactionWSDTO:
+      type: object
+      properties:
+        supplierTaxCode:
+          type: string
+        templateCode:
+          type: string
+        invoiceNo:
+          type: string
+        strIssueDate:
+          type: integer
+        additionalReferenceDesc:
+          type: string
+        additionalReferenceDate:
+          type: integer
+        reasonDelete:
+          type: string
+      required:
+        - supplierTaxCode
+        - templateCode
+        - invoiceNo
+        - strIssueDate
+        - additionalReferenceDesc
+        - additionalReferenceDate
+    SearchByTransUUIDDTO:
+      type: object
+      properties:
+        supplierTaxCode:
+          type: string
+        transactionUuid:
+          type: string
+      required:
+        - supplierTaxCode
+        - transactionUuid
+    GetInvoiceInput:
+      type: object
+      properties:
+        supplierTaxCode:
+          type: string
+        fromDate:
+          type: string
+          pattern: ^\d{2}\/\d{2}\/\d{4}$
+        toDate:
+          type: string
+          pattern: ^\d{2}\/\d{2}\/\d{4}$
+        invoiceType:
+          type: string
+          enum:
+            - "1"
+            - "2"
+            - "6"
+        rowPerPage:
+          type: integer
+          exclusiveMinimum: 0
+        pageNum:
+          type: integer
+          minimum: 0
+        status:
+          type: integer
+      required:
+        - supplierTaxCode
+        - fromDate
+        - toDate
+    CreateInvoiceResp:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        description:
+          type: string
+        result:
+          type: object
+          properties:
+            invoiceNo:
+              type: string
+            transactionID:
+              type: string
+            reservationCode:
+              type: string
+            codeOfTax:
+              type: string
+          required:
+            - invoiceNo
+    CancelInvoiceResp:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        description:
+          type: string
+        result:
+          type: boolean
+    SearchUUIDResp:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        description:
+          type: string
+        result:
+          type: object
+          properties:
+            invoiceNo:
+              type: string
+            status:
+              type: number
+            issueDate:
+              type: number
+            reservationCode:
+              type: string
+            codeOfTax:
+              type: string
+          required:
+            - invoiceNo
+            - status
+            - issueDate
+    HashResultResp:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        description:
+          type: string
+        result:
+          type: object
+          properties:
+            hash:
+              type: string
+            transactionUuid:
+              type: string
+          required:
+            - hash
+            - transactionUuid
+    InvoiceSearchResp:
+      type: object
+      properties:
+        invoices:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+        total:
+          type: number
+        pageNum:
+          type: number
+      required:
+        - invoices
+        - total
+        - pageNum
+    GetInvoiceFileResp:
+      type: object
+      properties:
+        fileBytes:
+          type: string
+          description: base64-encoded file content
+        fileName:
+          type: string
+      required:
+        - fileBytes
+        - fileName
+    GetInvoiceTemplatesResp:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        description:
+          type: string
+        result:
+          type: array
+          items:
+            type: object
+            properties:
+              templateCode:
+                type: string
+              templateName:
+                type: string
+              invoiceSeries:
+                type: string
+            required:
+              - templateCode
+              - templateName
+              - invoiceSeries
+  parameters: {}
+paths:
+  /services/einvoiceapplication/api/InvoiceAPI/InvoiceWS/createInvoice/{taxCode}:
+    post:
+      tags:
+        - Invoice (Stable)
+      summary: Create invoice (new / replace / adjust)
+      parameters:
+        - schema:
+            type: string
+            description: Supplier tax code
+          required: true
+          description: Supplier tax code
+          name: taxCode
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateInvoiceWSDTO"
+      responses:
+        "200":
+          description: Invoice created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateInvoiceResp"
+  /services/einvoiceapplication/api/InvoiceAPI/InvoiceWS/cancelTransactionInvoice:
+    post:
+      tags:
+        - Invoice (Stable)
+      summary: Cancel an invoice
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/CancelTransactionWSDTO"
+      responses:
+        "200":
+          description: Cancel result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CancelInvoiceResp"
+  /services/einvoiceapplication/api/InvoiceAPI/InvoiceWS/searchInvoiceByTransactionUuid:
+    post:
+      tags:
+        - Invoice (Stable)
+      summary: Search invoice by transaction UUID
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/SearchByTransUUIDDTO"
+      responses:
+        "200":
+          description: Invoice detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchUUIDResp"
+  /services/einvoiceapplication/api/InvoiceAPI/InvoiceWS/createInvoiceUsbTokenGetHash/{taxCode}:
+    post:
+      tags:
+        - Invoice (Stable)
+      summary: Get hash for USB-token signing
+      parameters:
+        - schema:
+            type: string
+          required: true
+          name: taxCode
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateInvoiceWSDTO"
+      responses:
+        "200":
+          description: Hash result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HashResultResp"
+  /services/einvoiceapplication/api/InvoiceAPI/InvoiceUtilsWS/getListInvoiceDataControl:
+    post:
+      tags:
+        - Experimental
+      summary: "[Experimental] List invoices by date range"
+      description: Wire format verified against existing viettel-s-invoice TS package.
+        fromDate/toDate must be dd/MM/yyyy.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetInvoiceInput"
+      responses:
+        "200":
+          description: Invoice list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvoiceSearchResp"
+  /services/einvoiceapplication/api/InvoiceAPI/InvoiceUtilsWS/getInvoiceRepresentationFile:
+    post:
+      tags:
+        - Experimental
+      summary: "[Experimental] Get invoice PDF/ZIP file"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                supplierTaxCode:
+                  type: string
+                invoiceNo:
+                  type: string
+                templateCode:
+                  type: string
+                fileType:
+                  type: string
+                  enum:
+                    - PDF
+                    - ZIP
+              required:
+                - supplierTaxCode
+                - invoiceNo
+                - templateCode
+                - fileType
+      responses:
+        "200":
+          description: File content (base64)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetInvoiceFileResp"
+  /services/einvoiceapplication/api/InvoiceAPI/InvoiceUtilsWS/getInvoiceTemplates:
+    post:
+      tags:
+        - Experimental
+      summary: "[Experimental] Get invoice templates"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                taxCode:
+                  type: string
+                invoiceType:
+                  type: string
+                  enum:
+                    - "1"
+                    - "2"
+                    - "6"
+              required:
+                - taxCode
+                - invoiceType
+      responses:
+        "200":
+          description: Template list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetInvoiceTemplatesResp"
+webhooks: {}
