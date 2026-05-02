@@ -1,5 +1,3 @@
-import type { ItemInfo } from './invoice-input.js'
-
 export interface CreateInvoiceDTO {
   invoiceNo: string
   transactionID?: string
@@ -34,37 +32,53 @@ export interface SearchUUIDResp {
   result?: SearchUUIDInvoiceResult
 }
 
-export interface InvoicesOutput {
-  invoiceNo: string
-  templateCode: string
-  invoiceSeries: string
+/** One invoice row as returned by getListInvoiceDataControl. Verified from live response. */
+export interface InvoicesAll {
+  invoiceId: number
   invoiceType: string
-  currencyCode: string
-  totalAmountWithoutTax: number
-  totalTaxAmount: number
-  totalAmountWithTax: number
-  buyerName?: string
-  buyerLegalName?: string
-  buyerTaxCode?: string
-  issueDate: number
-  status: number
-  transactionID?: string
-  reservationCode?: string
-  adjustmentType?: string
-  originalInvoiceId?: string
-  codeOfTax?: string
-}
-
-export interface InvoicesAll extends InvoicesOutput {
-  listProduct?: ItemInfo[]
-  buyerCode?: string
-  exchangeRate?: number
+  adjustmentType: string
+  templateCode: string
+  invoiceSeri: string           // API spells it "Seri", not "Series"
+  invoiceNumber: string
+  invoiceNo: string
+  currency: string
+  total: number
+  issueDate: number | null      // epoch ms
+  issueDateStr: string | null
+  state: number
+  stateCode: number
+  requestDate: string | null
+  description: string | null
+  buyerIdNo: string | null
+  subscriberNumber: string | null
+  paymentStatus: number | null
+  viewStatus: unknown
+  downloadStatus: unknown
+  exchangeStatus: number
+  numOfExchange: number | null
+  createTime: number            // epoch ms
+  contractId: unknown
+  contractNo: string | null
+  supplierTaxCode: string
+  buyerTaxCode: string | null
+  totalBeforeTax: number
+  taxAmount: number
+  taxRate: number | null
+  paymentMethod: string
+  paymentTime: number | null
+  customerId: unknown
+  no: unknown
+  paymentStatusName: string | null
+  buyerName: string | null
+  transactionUuid: string | null
+  originalInvoiceId: number | null
 }
 
 export interface InvoiceSearch {
+  errorCode: string | null
+  description: string | null
+  totalRows: number
   invoices: InvoicesAll[]
-  total: number
-  pageNum: number
 }
 
 export interface HashResultResp {

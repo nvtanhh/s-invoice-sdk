@@ -45,6 +45,19 @@ const result = await client.search.searchByTransactionUuid({
 await client.cancel.cancelInvoice({ ... })
 ```
 
+## Try the Web Demo
+
+A working Express.js + vanilla JavaScript demo is included in `examples/web-demo/`. It showcases invoice creation, cancellation, and search with a live web interface.
+
+```bash
+cd examples/web-demo
+npm install
+npm start
+# → Opens at http://localhost:3000
+```
+
+See the [docs](./docs/README.md) for more details.
+
 ## Services
 
 | Service | Method | Status | Description |

@@ -125,6 +125,19 @@ try {
 }
 ```
 
+### Try the Web Demo
+
+A ready-to-run Express + vanilla JavaScript demo is included at `../examples/web-demo/`. It demonstrates the SDK's core operations (invoice creation, cancellation, search) with a web interface.
+
+**Setup:**
+```bash
+cd ../examples/web-demo
+npm install
+npm start
+```
+
+Then open `http://localhost:3000` and fill in your credentials to test the API.
+
 ---
 
 ## Core Features
