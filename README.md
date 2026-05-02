@@ -1,16 +1,21 @@
 # viettel-vinvoice-sdk
 
-> [!NOTE]
-> This is an **UNOFFICIAL** project. It is not affiliated with or endorsed by Viettel.
+> [!WARNING]
+> **Đây KHÔNG phải tài liệu hay sản phẩm chính thức của Viettel.**
+> Đây là dự án cá nhân, tự viết để phục vụ mục đích sử dụng riêng. Không có bất kỳ liên kết, hợp tác, hay chứng nhận nào từ phía Viettel.
+>
+> Tác giả **không chịu trách nhiệm** về bất kỳ sự cố, mất mát dữ liệu, hay thiệt hại nào phát sinh từ việc sử dụng thư viện này. **Dùng trên tinh thần tự chịu rủi ro.**
 
-A modern TypeScript SDK for the Viettel VinInvoice e-invoice API. ESM-only, with full Zod validation, token caching, and 100% test coverage.
+---
 
-## Requirements
+TypeScript SDK không chính thức cho Viettel VinInvoice e-invoice API. ESM-only, Node.js ≥18.18, Zod validation, token caching.
 
-- **Node.js** ≥18.18
-- **ES Module** environments only
+## Yêu cầu
 
-## Installation
+- Node.js ≥18.18
+- ESM only (`"type": "module"` trong `package.json`)
+
+## Cài đặt
 
 ```bash
 npm install viettel-vinvoice-sdk
@@ -22,107 +27,70 @@ npm install viettel-vinvoice-sdk
 import { ViettelInvoiceClient } from 'viettel-vinvoice-sdk'
 
 const client = new ViettelInvoiceClient({
-  baseUrl: 'https://api-vinvoice.viettel.vn',
+  baseUrl: 'https://vinvoice.viettel.vn/api',
   taxCode: '0100000000',
   username: 'your-username',
   password: 'your-password'
 })
 
-// Create invoice
-const invoice = await client.invoices.createInvoice({
-  invoiceType: '01BLP',
-  invoiceNo: 'HD001',
-  invoiceDate: '01/05/2026',
-  totalAmount: 1000000,
-  items: [
-    {
-      itemName: 'Service A',
-      quantity: 1,
-      unitPrice: 1000000
-    }
-  ]
-})
-console.log('Created:', invoice.invoiceNo)
+// Tạo hóa đơn
+const invoice = await client.invoices.createInvoice({ ... })
 
-// Search by transaction UUID
+// Tìm theo UUID
 const result = await client.search.searchByTransactionUuid({
-  transactionUuid: invoice.uuid
+  transactionUuid: invoice.result?.transactionID
 })
-console.log('Search result:', result)
 
-// Cancel invoice
-const cancel = await client.cancel.cancelInvoice({
-  invoiceNo: invoice.invoiceNo,
-  reason: 'Error in invoice'
-})
-console.log('Cancelled:', cancel.status)
+// Hủy hóa đơn
+await client.cancel.cancelInvoice({ ... })
 ```
 
-## Core Services
+## Services
 
-| Service | Method | Tier | Purpose |
-|---------|--------|------|---------|
-| `invoices` | `createInvoice()` | Stable | Create a new e-invoice |
-| `cancel` | `cancelInvoice()` | Stable | Cancel an existing invoice |
-| `search` | `searchByTransactionUuid()` | Stable | Find invoice by UUID |
-| `usbToken` | `getHash()` | Stable | USB token signing (hash generation) |
-| `usbToken` | `submitSignedHash()` | Stable | Submit signed hash after signing |
+| Service | Method | Trạng thái | Mô tả |
+|---------|--------|------------|-------|
+| `invoices` | `createInvoice()` | Stable | Tạo hóa đơn mới / thay thế / điều chỉnh |
+| `cancel` | `cancelInvoice()` | Stable | Hủy hóa đơn |
+| `search` | `searchByTransactionUuid()` | Stable | Tìm hóa đơn theo UUID |
+| `usbToken` | `getHash()` | Stable | Lấy hash để ký USB token |
+| `usbToken` | `submitSignedHash()` | Stable | Nộp hash đã ký |
+| `experimental.*` | — | Experimental | list / file / templates / payments / batch |
 
-## Configuration
-
-### Required Options
+## Cấu hình
 
 ```typescript
 const client = new ViettelInvoiceClient({
-  baseUrl: string      // API host: 'https://api-vinvoice.viettel.vn'
-  taxCode: string      // Supplier tax code (e.g., '0100000000')
-  username: string     // Account username
-  password: string     // Account password
+  baseUrl: string       // 'https://vinvoice.viettel.vn/api'
+  taxCode: string       // Mã số thuế người bán
+  username: string
+  password: string
+  tokenSkewMs?: number  // default 30_000 ms
+  timeoutMs?: number    // default 30_000 ms
+  authPath?: string     // default '/auth/login'
+  logger?: Logger       // custom logger
 })
 ```
 
-### Optional Options
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `tokenSkewMs` | number | `30000` | Buffer (ms) before token refresh |
-| `timeoutMs` | number | `30000` | Axios request timeout |
-| `authPath` | string | `'/auth/login'` | Custom authentication endpoint |
-| `logger` | Logger | noop | Custom logger for debug output |
-
-## Experimental Services
-
-The following services are marked as **experimental** and may change:
-
-- `client.experimental.list` – List invoices
-- `client.experimental.file` – Retrieve invoice files
-- `client.experimental.templates` – Get invoice templates
-- `client.experimental.payments` – Payment information
-- `client.experimental.batch` – Batch operations
-
-Use only if you accept API instability.
-
-## Features
-
-- **Full Zod Validation** – All inputs and outputs validated
-- **Token Caching** – Auto-refresh with configurable skew
-- **TypeScript-First** – ESM build with inline `.d.ts` files
-- **Comprehensive Tests** – 117 tests, 100% coverage
-- **Error Handling** – Typed exceptions with detailed messages
-- **Logging** – Optional structured logging support
-
 ## Error Handling
 
-All service methods throw SDK-specific errors. Wrap calls in try/catch:
-
 ```typescript
+import {
+  ViettelApiError,
+  ViettelAuthError,
+  ViettelNetworkError,
+  ViettelValidationError
+} from 'viettel-vinvoice-sdk'
+
 try {
   await client.invoices.createInvoice(data)
 } catch (err) {
-  console.error('Failed:', err.message)
+  if (err instanceof ViettelValidationError) { /* input sai */ }
+  if (err instanceof ViettelAuthError)       { /* 401/403 */ }
+  if (err instanceof ViettelNetworkError)    { /* timeout/no response */ }
+  if (err instanceof ViettelApiError)        { /* lỗi từ API */ }
 }
 ```
 
 ## License
 
-MIT. See LICENSE file.
+MIT
