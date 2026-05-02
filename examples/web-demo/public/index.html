@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VinInvoice SDK Demo</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>VinInvoice SDK Demo</h1>
+    <span id="status-pill" class="pill pill-disconnected">Not connected</span>
+  </header>
+
+  <nav>
+    <button data-tab="connect" class="tab-btn active">Connect</button>
+    <button data-tab="create" class="tab-btn">Create Invoice</button>
+    <button data-tab="search" class="tab-btn">Search</button>
+    <button data-tab="cancel" class="tab-btn">Cancel</button>
+    <button data-tab="list" class="tab-btn">List</button>
+  </nav>
+
+  <main>
+    <!-- Connect Panel -->
+    <section data-panel="connect">
+      <h2>Connect to VinInvoice API</h2>
+      <form data-form="connect">
+        <div class="form-grid">
+          <label>Base URL
+            <input name="baseUrl" type="url" value="https://vinvoice.viettel.vn/api" required />
+          </label>
+          <label>Username
+            <input name="username" type="text" placeholder="your-username" required />
+          </label>
+          <label>Password
+            <input name="password" type="password" placeholder="your-password" required />
+          </label>
+          <label>Tax Code (supplierTaxCode)
+            <input name="taxCode" type="text" placeholder="0123456789" required />
+          </label>
+        </div>
+        <button type="submit" class="btn-primary">Save &amp; Test Connection</button>
+      </form>
+      <div class="io-grid">
+        <div>
+          <h3>Request</h3>
+          <pre data-panel="connect" data-role="request"></pre>
+        </div>
+        <div>
+          <h3>Response</h3>
+          <pre data-panel="connect" data-role="response"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Create Panel -->
+    <section data-panel="create" hidden>
+      <h2>Create Invoice</h2>
+      <form data-form="create">
+        <div class="form-grid">
+          <label>Template Code
+            <input name="templateCode" type="text" required />
+          </label>
+          <label>Invoice Series
+            <input name="invoiceSeries" type="text" required />
+          </label>
+          <label>Currency Code
+            <input name="currencyCode" type="text" value="VND" required />
+          </label>
+          <label>Payment Method
+            <input name="paymentMethodName" type="text" value="TM/CK" required />
+          </label>
+          <label>Buyer Name
+            <input name="buyerName" type="text" required />
+          </label>
+          <label>Buyer Legal Name
+            <input name="buyerLegalName" type="text" required />
+          </label>
+          <label>Buyer Tax Code
+            <input name="buyerTaxCode" type="text" placeholder="optional, 10–14 digits/dashes" />
+            <span class="field-hint">10–14 digits, dashes allowed</span>
+          </label>
+          <label>Item Name
+            <input name="itemName" type="text" value="Consulting service" required />
+          </label>
+          <label>Unit Name
+            <input name="unitName" type="text" value="hour" required />
+          </label>
+          <label>Unit Price
+            <input name="unitPrice" type="number" value="1000000" min="0" required />
+          </label>
+          <label>Quantity
+            <input name="quantity" type="number" value="1" min="0" step="any" required />
+          </label>
+          <label>Tax Percentage (%)
+            <input name="taxPercentage" type="number" value="10" min="0" max="100" required />
+          </label>
+        </div>
+        <button type="submit" class="btn-primary">Create Invoice</button>
+      </form>
+      <div class="io-grid">
+        <div>
+          <h3>Request</h3>
+          <pre data-panel="create" data-role="request"></pre>
+        </div>
+        <div>
+          <h3>Response</h3>
+          <pre data-panel="create" data-role="response"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search Panel -->
+    <section data-panel="search" hidden>
+      <h2>Search Invoice by Transaction UUID</h2>
+      <form data-form="search">
+        <div class="form-grid">
+          <label>Transaction UUID
+            <input name="transactionUuid" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" required />
+          </label>
+        </div>
+        <button type="submit" class="btn-primary">Search</button>
+      </form>
+      <div class="io-grid">
+        <div>
+          <h3>Request</h3>
+          <pre data-panel="search" data-role="request"></pre>
+        </div>
+        <div>
+          <h3>Response</h3>
+          <pre data-panel="search" data-role="response"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cancel Panel -->
+    <section data-panel="cancel" hidden>
+      <h2>Cancel Invoice</h2>
+      <form data-form="cancel">
+        <div class="form-grid">
+          <label>Template Code
+            <input name="templateCode" type="text" required />
+          </label>
+          <label>Invoice No
+            <input name="invoiceNo" type="text" required />
+          </label>
+          <label>Issue Date
+            <input name="issueDate" type="date" required />
+          </label>
+          <label>Reference Description
+            <input name="additionalReferenceDesc" type="text" required />
+          </label>
+          <label>Reference Date
+            <input name="additionalReferenceDate" type="date" required />
+          </label>
+          <label>Reason (optional)
+            <textarea name="reasonDelete" rows="2" placeholder="Reason for cancellation"></textarea>
+          </label>
+        </div>
+        <button type="submit" class="btn-primary">Cancel Invoice</button>
+      </form>
+      <div class="io-grid">
+        <div>
+          <h3>Request</h3>
+          <pre data-panel="cancel" data-role="request"></pre>
+        </div>
+        <div>
+          <h3>Response</h3>
+          <pre data-panel="cancel" data-role="response"></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+    <!-- List Panel -->
+    <section data-panel="list" hidden>
+      <h2>List Invoices <span class="badge-experimental">experimental</span></h2>
+      <form data-form="list">
+        <div class="form-grid">
+          <label>From Date
+            <input name="fromDate" type="date" required />
+          </label>
+          <label>To Date
+            <input name="toDate" type="date" required />
+          </label>
+          <label>Invoice Type
+            <select name="invoiceType">
+              <option value="">— any —</option>
+              <option value="1">1 — GTGT</option>
+              <option value="2">2 — Bán hàng</option>
+              <option value="6">6 — PXK</option>
+            </select>
+          </label>
+          <label>Rows per page
+            <input name="rowPerPage" type="number" value="20" min="1" max="100" />
+          </label>
+          <label>Page (0-based)
+            <input name="pageNum" type="number" value="0" min="0" />
+          </label>
+          <label>Status filter
+            <input name="status" type="number" placeholder="optional" />
+          </label>
+        </div>
+        <button type="submit" class="btn-primary">List Invoices</button>
+      </form>
+      <div class="io-grid">
+        <div>
+          <h3>Request</h3>
+          <pre data-panel="list" data-role="request"></pre>
+        </div>
+        <div>
+          <h3>Response</h3>
+          <pre data-panel="list" data-role="response"></pre>
+        </div>
+      </div>
+    </section>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>

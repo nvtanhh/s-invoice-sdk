@@ -1,0 +1,199 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  color: #1a1a2e;
+  background: #f5f5f8;
+  padding-bottom: 40px;
+}
+
+header {
+  background: #1a1a2e;
+  color: #fff;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+header h1 { font-size: 18px; font-weight: 600; }
+
+.pill {
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+.pill-disconnected { background: #e53e3e; color: #fff; }
+.pill-connected    { background: #38a169; color: #fff; }
+
+nav {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  gap: 4px;
+  border-bottom: 2px solid #ddd;
+  background: #fff;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 12px 18px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: -2px;
+  transition: color 0.15s;
+}
+.tab-btn:hover { color: #1a1a2e; }
+.tab-btn.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+  font-weight: 600;
+}
+
+main {
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 0 24px;
+}
+
+section { animation: fadeIn 0.15s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; } }
+
+h2 { font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #1a1a2e; }
+h3 { font-size: 13px; font-weight: 600; margin-bottom: 8px; color: #444; }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #444;
+}
+
+input, textarea {
+  padding: 7px 10px;
+  border: 1px solid #cbd5e0;
+  border-radius: 5px;
+  font-size: 13px;
+  font-family: inherit;
+  color: #1a1a2e;
+  background: #fff;
+  transition: border-color 0.15s;
+}
+input:focus, textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.15);
+}
+textarea { resize: vertical; }
+
+.field-hint {
+  font-size: 11px;
+  color: #888;
+  font-weight: 400;
+}
+
+.btn-primary {
+  padding: 9px 20px;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-bottom: 20px;
+}
+.btn-primary:hover { background: #2563eb; }
+.btn-primary:active { background: #1d4ed8; }
+
+.io-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 800px) { .io-grid { grid-template-columns: 1fr; } }
+
+pre {
+  background: #1e1e2e;
+  color: #cdd6f4;
+  font-family: 'Menlo', 'Consolas', monospace;
+  font-size: 12px;
+  padding: 14px;
+  border-radius: 8px;
+  overflow: auto;
+  max-height: 400px;
+  min-height: 60px;
+  white-space: pre;
+  tab-size: 2;
+}
+pre:empty::before { content: '—'; color: #555; }
+
+/* Syntax highlight colors (Catppuccin-inspired) */
+.json-string  { color: #a6e3a1; }
+.json-number  { color: #fab387; }
+.json-boolean { color: #89b4fa; }
+.json-null    { color: #f38ba8; }
+.json-key     { color: #89dceb; }
+
+.error-block {
+  background: #fff5f5;
+  border-left: 4px solid #c53030;
+  color: #742a2a;
+  padding: 12px 16px;
+  border-radius: 0 6px 6px 0;
+  margin-top: 8px;
+  font-size: 13px;
+}
+.error-block strong { display: block; margin-bottom: 4px; }
+.error-block .issues { margin-top: 6px; padding-left: 16px; }
+.error-block .issues li { margin-bottom: 2px; }
+
+.badge-experimental {
+  font-size: 11px;
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+  border-radius: 4px;
+  padding: 2px 7px;
+  vertical-align: middle;
+  font-weight: 500;
+}
+
+select {
+  padding: 7px 10px;
+  border: 1px solid #cbd5e0;
+  border-radius: 5px;
+  font-size: 13px;
+  font-family: inherit;
+  color: #1a1a2e;
+  background: #fff;
+}
+
+.success-block {
+  background: #f0fff4;
+  border-left: 4px solid #276749;
+  color: #22543d;
+  padding: 12px 16px;
+  border-radius: 0 6px 6px 0;
+  margin-top: 8px;
+  font-size: 13px;
+}
